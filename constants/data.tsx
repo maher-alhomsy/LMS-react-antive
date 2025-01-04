@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Dimensions, Image } from 'react-native';
 
 import { onBoardingSlides } from '@/types';
 import { IsIPAD } from '@/themes/app.constant';
@@ -60,3 +60,18 @@ export const onBoardingSlidesData: onBoardingSlides[] = [
       'Achieve certification by completing courses with dedicated effort',
   },
 ];
+
+export enum Side {
+  LEFT,
+  RIGHT,
+  NONE,
+}
+
+export const MIN_LEDGE = 25;
+export const MARGIN_WIDTH = MIN_LEDGE + 50;
+export const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+
+export const NEXT = 0;
+export const PREV = WIDTH;
+export const LEFT_SNAP_POINTS = [MARGIN_WIDTH, PREV];
+export const RIGHT_SNAP_POINTS = [NEXT, WIDTH - MARGIN_WIDTH];

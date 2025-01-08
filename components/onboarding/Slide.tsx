@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   Text,
   View,
+  Modal,
   Platform,
   Pressable,
   StyleSheet,
@@ -11,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
+
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters';
 
 import {
@@ -21,6 +23,7 @@ import {
 } from '@/themes/app.constant';
 import { onBoardingSlides } from '@/types';
 import { HEIGHT, WIDTH } from '@/constants/data';
+import AuthModal from '../auth/AuthModal';
 
 type Props = {
   index: number;
@@ -143,6 +146,22 @@ const Slide = ({ slide, index, setIndex, totalSlides }: Props) => {
           />
         </TouchableOpacity>
       )}
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible((prev) => !prev);
+        }}
+      >
+        <Pressable
+          style={{ flex: 1 }}
+          onPress={() => setModalVisible((prev) => !prev)}
+        >
+          <AuthModal />
+        </Pressable>
+      </Modal>
     </>
   );
 };

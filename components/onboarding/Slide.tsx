@@ -45,7 +45,7 @@ const Slide = ({ slide, index, setIndex, totalSlides }: Props) => {
 
   return (
     <>
-      <Svg style={StyleSheet.absoluteFill}>
+      <Svg style={[StyleSheet.absoluteFill, { backgroundColor: slide.color }]}>
         <Defs>
           <RadialGradient id="gradiant" cx="50%" cy="35%">
             <Stop offset="0%" stopColor={slide.color} />

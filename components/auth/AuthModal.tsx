@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Image,
   Text,
@@ -7,12 +8,12 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import JWT from 'expo-jwt';
 import { BlurView } from 'expo-blur';
 import { useAuthRequest, makeRedirectUri } from 'expo-auth-session';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
-import { useState } from 'react';
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
@@ -28,17 +29,55 @@ const AuthModal = () => {
   const configureGoogleSignIn = () => {
     if (Platform.OS === 'ios') {
       GoogleSignin.configure();
+    } else {
+      GoogleSignin.configure({
+        webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+        scopes: ['profile', 'email'],
+      });
     }
   };
 
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
+
   const googleSignIn = async () => {
     try {
-      const response = await GoogleLogin();
+      const { data } = await GoogleLogin();
 
-      console.log(response);
+      authHandler({
+        name: data?.user.name!,
+        email: data?.user.email!,
+        avatar: data?.user.photo!,
+      });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const authHandler = ({
+    name,
+    email,
+    avatar,
+  }: {
+    name: string;
+    email: string;
+    avatar: string;
+  }) => {
+    const user = {
+      name,
+      email,
+      avatar,
+    };
+
+    const token = JWT.encode(
+      {
+        ...user,
+      },
+      process.env.EXPO_PUBLIC_JWT_SECRET_KEY!
+    );
+
+    console.log(token);
   };
 
   return (

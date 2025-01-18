@@ -1,10 +1,46 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Text,
+  View,
+  Platform,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
 
 import { BlurView } from 'expo-blur';
+import { useAuthRequest, makeRedirectUri } from 'expo-auth-session';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
+import { useState } from 'react';
 
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
+  scopes: ['profile', 'email'],
+});
+
+const GoogleLogin = async () => {
+  await GoogleSignin.hasPlayServices();
+  const userInfo = await GoogleSignin.signIn();
+  return userInfo;
+};
 const AuthModal = () => {
+  const configureGoogleSignIn = () => {
+    if (Platform.OS === 'ios') {
+      GoogleSignin.configure();
+    }
+  };
+
+  const googleSignIn = async () => {
+    try {
+      const response = await GoogleLogin();
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <BlurView
       experimentalBlurMethod="dimezisBlurView"
@@ -37,7 +73,7 @@ const AuthModal = () => {
             paddingVertical: windowHeight(10),
           }}
         >
-          <Pressable>
+          <Pressable onPress={() => googleSignIn()}>
             <Image
               style={styles.img}
               source={require('@/assets/images/onboarding/google.png')}

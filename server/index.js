@@ -3,6 +3,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 
 import prisma from './utils/prisma.js';
+import { sendToken } from './utils/sendToken.js';
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ app.post('/login', async (req, res) => {
       });
 
       if (isUserExist) {
-        // await sendToken(isUserExist, res);
+        await sendToken(isUserExist, res);
       } else {
         const user = await prisma.user.create({
           data: {
@@ -33,7 +34,7 @@ app.post('/login', async (req, res) => {
           },
         });
 
-        // await sendToken(user, res);
+        await sendToken(user, res);
       }
     } else {
       res

@@ -12,6 +12,7 @@ import axios from 'axios';
 import JWT from 'expo-jwt';
 import { router } from 'expo-router';
 import { BlurView } from 'expo-blur';
+import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
 import { useAuthRequest, makeRedirectUri } from 'expo-auth-session';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -42,6 +43,76 @@ const AuthModal = ({
   useEffect(() => {
     configureGoogleSignIn();
   }, []);
+
+  const githubAuthEndpoint = {
+    tokenEndpoint: 'https://github.com/login/oauth/access_token',
+    authorizationEndpoint: 'https://github.com/login/oauth/authorize',
+    revocationEndpoint: `https://github.com/settings/connections/applications/${process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID}`,
+  };
+
+  const [request, response] = useAuthRequest(
+    {
+      clientId: process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID!,
+      clientSecret: process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET!,
+      scopes: ['identity'],
+      redirectUri: makeRedirectUri({ scheme: 'myapp' }),
+    },
+    githubAuthEndpoint
+  );
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params;
+      fetchAccessToken(code);
+    }
+  }, []);
+
+  const handleGithubLogin = async () => {
+    const result = await WebBrowser.openAuthSessionAsync(
+      request?.url!,
+      makeRedirectUri({ scheme: 'myapp' })
+    );
+
+    if (result.type === 'success' && result.url) {
+      const urlParams = new URLSearchParams(result.url.split('?')[1]);
+      const code: any = urlParams.get('code');
+
+      fetchAccessToken(code);
+    }
+  };
+
+  const fetchAccessToken = async (code: string) => {
+    const tokenResponse = await fetch(
+      'https://github.com/login/oauth/access_token',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `client_id=${process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID}&client_secret=${process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET}&code=${code}`,
+      }
+    );
+
+    const { access_token } = await tokenResponse.json();
+    fetchUserInfo(access_token);
+  };
+
+  const fetchUserInfo = async (token: string) => {
+    const userResponse = await fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const userData = await userResponse.json();
+
+    await authHandler({
+      name: userData.name!,
+      email: userData.email!,
+      avatar: userData.avatar_url!,
+    });
+  };
 
   const googleSignIn = async () => {
     try {
@@ -123,7 +194,7 @@ const AuthModal = ({
             />
           </Pressable>
 
-          <Pressable>
+          <Pressable onPress={handleGithubLogin}>
             <Image
               style={styles.img}
               source={require('@/assets/images/onboarding/github.png')}

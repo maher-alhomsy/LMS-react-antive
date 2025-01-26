@@ -8,17 +8,15 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import axios from 'axios';
 import JWT from 'expo-jwt';
+import { router } from 'expo-router';
 import { BlurView } from 'expo-blur';
+import * as SecureStore from 'expo-secure-store';
 import { useAuthRequest, makeRedirectUri } from 'expo-auth-session';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
-
-GoogleSignin.configure({
-  webClientId: process.env.EXPO_PUBLIC_CLIENT_ID,
-  scopes: ['profile', 'email'],
-});
 
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices();
@@ -55,7 +53,7 @@ const AuthModal = () => {
     }
   };
 
-  const authHandler = ({
+  const authHandler = async ({
     name,
     email,
     avatar,
@@ -71,13 +69,14 @@ const AuthModal = () => {
     };
 
     const token = JWT.encode(
-      {
-        ...user,
-      },
+      { ...user },
       process.env.EXPO_PUBLIC_JWT_SECRET_KEY!
     );
 
-    console.log(token);
+    const { data } = await axios.post('login', { signedToken: token });
+
+    await SecureStore.setItemAsync('accessToken', data.accessToken);
+    router.push('/(tabs)');
   };
 
   return (

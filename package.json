@@ -21,6 +21,7 @@
     "@react-native-google-signin/google-signin": "^13.1.0",
     "@react-native-masked-view/masked-view": "0.3.1",
     "@react-navigation/native": "^6.0.2",
+    "axios": "^1.7.9",
     "expo": "~51.0.28",
     "expo-auth-session": "~5.5.2",
     "expo-blur": "~13.0.2",

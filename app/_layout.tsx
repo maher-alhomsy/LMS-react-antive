@@ -1,7 +1,6 @@
-import { SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 
-import { ThemeProvider } from '@/context/theme.context';
-
+import axios from 'axios';
 import {
   Poppins_700Bold,
   Poppins_300Light,
@@ -10,9 +9,13 @@ import {
   Poppins_600SemiBold,
 } from '@expo-google-fonts/poppins';
 import { useFonts } from 'expo-font';
-import { useEffect } from 'react';
+import { SplashScreen, Stack } from 'expo-router';
+
+import { ThemeProvider } from '@/context/theme.context';
 
 SplashScreen.preventAutoHideAsync();
+
+axios.defaults.baseURL = process.env.EXPO_PUBLIC_SERVER_URI;
 
 export default function RootLayout() {
   const [loaded] = useFonts({

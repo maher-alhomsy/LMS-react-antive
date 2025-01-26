@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import prisma from './utils/prisma.js';
 import { sendToken } from './utils/sendToken.js';
+import { isAuthenticated } from './middleware/isAuthenticated.js';
 
 dotenv.config();
 
@@ -48,6 +49,16 @@ app.post('/login', async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+  }
+});
+
+app.get('/me', isAuthenticated, async (req, res) => {
+  try {
+    const { user } = req;
+
+    res.status(201).json({ success: true, user });
+  } catch (error) {
+    console.error(error);
   }
 });
 

@@ -15,12 +15,17 @@ app.use(express.json({ limit: '100mb' }));
 app.post('/login', async (req, res) => {
   try {
     const { signedToken } = req.body;
-    const data = jwt.verify(signedToken, process.env.JWT_SECRET_KEY);
+    const secretKey = process.env.JWT_SECRET_KEY;
+
+    if (!signedToken) {
+      return res.status(404).json({ message: 'Invalid signature token' });
+    }
+
+    const data = jwt.verify(signedToken, secretKey);
+
     if (data) {
       const isUserExist = await prisma.user.findUnique({
-        where: {
-          email: data.email,
-        },
+        where: { email: data.email },
       });
 
       if (isUserExist) {

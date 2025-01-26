@@ -23,7 +23,11 @@ const GoogleLogin = async () => {
   const userInfo = await GoogleSignin.signIn();
   return userInfo;
 };
-const AuthModal = () => {
+const AuthModal = ({
+  setModalVisible,
+}: {
+  setModalVisible: (modal: boolean) => void;
+}) => {
   const configureGoogleSignIn = () => {
     if (Platform.OS === 'ios') {
       GoogleSignin.configure();
@@ -76,6 +80,7 @@ const AuthModal = () => {
     const { data } = await axios.post('login', { signedToken: token });
 
     await SecureStore.setItemAsync('accessToken', data.accessToken);
+    setModalVisible(false);
     router.push('/(tabs)');
   };
 

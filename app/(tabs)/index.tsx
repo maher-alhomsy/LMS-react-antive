@@ -1,14 +1,26 @@
-import { Text } from 'react-native';
+import React from 'react';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+
+import { useTheme } from '@/context/theme.context';
+import WelcomeHeader from '@/components/home/WelcomeHeader';
 
 const Home = () => {
+  const { theme } = useTheme();
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <Text>HOME</Text>
-    </SafeAreaView>
+    <>
+      <LinearGradient
+        end={{ x: 0, y: 1 }}
+        start={{ x: 0, y: 0 }}
+        style={{ flex: 1, backgroundColor: theme.dark ? '#101010' : '#fff' }}
+        colors={
+          theme.dark ? ['#180d41', '#2A2D32', '#131313'] : ['#fff', '#f7f7f7']
+        }
+      >
+        <WelcomeHeader />
+      </LinearGradient>
+    </>
   );
 };
 

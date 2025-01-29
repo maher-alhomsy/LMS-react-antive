@@ -75,3 +75,21 @@ export const NEXT = 0;
 export const PREV = WIDTH;
 export const LEFT_SNAP_POINTS = [MARGIN_WIDTH, PREV];
 export const RIGHT_SNAP_POINTS = [NEXT, WIDTH - MARGIN_WIDTH];
+
+export const bannerData = [
+  {
+    image:
+      'https://res.cloudinary.com/dkg6jv4l0/image/upload/v1729365053/WhatsApp_Image_2024-09-02_at_2.07.32_PM_kb1mwe.jpg',
+    url: 'https://react-native.becodemy.com',
+  },
+  {
+    image:
+      'https://res.cloudinary.com/dwp4syk3r/image/upload/v1713574008/WhatsApp_Image_2024-02-29_at_2.00.10_AM_zpk4qe.jpg',
+    url: 'https://youtu.be/BrrwtCt7d-Y',
+  },
+  {
+    image:
+      'https://res.cloudinary.com/dkg6jv4l0/image/upload/v1723424082/WhatsApp_Image_2024-08-09_at_5.00.52_AM_wzokd1.jpg',
+    url: 'https://youtu.be/4aS7g8OYHbg',
+  },
+];

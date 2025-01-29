@@ -1,8 +1,10 @@
 import React from 'react';
+import { ScrollView } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '@/context/theme.context';
+import HomeBanner from '@/components/home/HomeBanner';
 import WelcomeHeader from '@/components/home/WelcomeHeader';
 
 const Home = () => {
@@ -19,6 +21,10 @@ const Home = () => {
         }
       >
         <WelcomeHeader />
+
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <HomeBanner />
+        </ScrollView>
       </LinearGradient>
     </>
   );

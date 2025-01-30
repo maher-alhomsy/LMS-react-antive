@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
+import { verticalScale } from 'react-native-size-matters';
 
 import { useTheme } from '@/context/theme.context';
+import Skeleton from '@/components/common/Skeleton';
 import HomeBanner from '@/components/home/HomeBanner';
 import WelcomeHeader from '@/components/home/WelcomeHeader';
-import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
-import { verticalScale } from 'react-native-size-matters';
 import GradientText from '@/components/common/GradientText';
+import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
 
 const Home = () => {
   const { theme } = useTheme();
+  const [loading, setLoading] = useState(true);
 
   return (
     <>
@@ -25,7 +27,11 @@ const Home = () => {
       >
         <WelcomeHeader />
 
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: windowHeight(50) }}
+        >
           <HomeBanner />
           <View
             style={{
@@ -52,7 +58,37 @@ const Home = () => {
                 }}
               />
             </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  borderRadius: 100,
+                  width: windowWidth(15),
+                  height: windowWidth(15),
+                  backgroundColor: '#12BB70',
+                }}
+              />
+              <Text
+                style={{
+                  fontSize: fontSizes.FONT18,
+                  paddingLeft: windowWidth(5),
+                  fontFamily: 'Poppins_400Regular',
+                  color: theme.dark ? '#fff' : '#000',
+                }}
+              >
+                our comprehensive project based courses
+              </Text>
+            </View>
           </View>
+
+          {loading ? (
+            <>
+              <Skeleton />
+              <Skeleton />
+            </>
+          ) : (
+            <View></View>
+          )}
         </ScrollView>
       </LinearGradient>
     </>

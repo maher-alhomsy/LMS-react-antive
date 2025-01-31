@@ -1,23 +1,39 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View, Image, ScrollView, StyleSheet } from 'react-native';
 
-import { useTheme } from '@/context/theme.context';
+import {
+  Feather,
+  Ionicons,
+  FontAwesome,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { scale, verticalScale } from 'react-native-size-matters';
+
+import {
+  IsIPAD,
+  IsAndroid,
+  fontSizes,
+  IsHaveNotch,
+} from '@/themes/app.constant';
 import { useUser } from '@/hooks/useUser';
 import useUserData from '@/hooks/useUserData';
-import { LinearGradient } from 'expo-linear-gradient';
-import { scale, verticalScale } from 'react-native-size-matters';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  fontSizes,
-  IsAndroid,
-  IsHaveNotch,
-  IsIPAD,
-} from '@/themes/app.constant';
+import { useTheme } from '@/context/theme.context';
 import ThemeSwitcher from '@/components/common/ThemeSwitcher';
+import ProfileSection from '@/components/common/ProfileSection';
+import { router } from 'expo-router';
 
 const Page = () => {
   const { theme } = useTheme();
   const { user, loader } = useUser();
   const { avatar, email, name } = useUserData();
+
+  const logoutHandler = async () => {
+    await SecureStore.deleteItemAsync('accessToken');
+    router.replace('/(routes)/onboarding');
+  };
 
   return (
     <View
@@ -28,8 +44,8 @@ const Page = () => {
     >
       <LinearGradient
         style={styles.header}
-        start={theme.dark ? { x: 1, y: 1 } : { x: 0, y: 1 }}
         end={theme.dark ? { x: 0, y: 1 } : { x: 0, y: 0 }}
+        start={theme.dark ? { x: 1, y: 1 } : { x: 0, y: 1 }}
         colors={
           theme.dark
             ? ['#121121', '#3c43c85c', '#121121']
@@ -39,12 +55,160 @@ const Page = () => {
         <SafeAreaView style={{ paddingTop: IsAndroid ? verticalScale(20) : 0 }}>
           <View style={styles.headerContent}>
             <Text style={styles.headerTitle}>Profile</Text>
-            <View>
-              <ThemeSwitcher />
-            </View>
+            <ThemeSwitcher />
           </View>
         </SafeAreaView>
       </LinearGradient>
+
+      <View
+        style={[
+          styles.profileWrapper,
+          {
+            backgroundColor: theme.dark ? '#121121' : '#fff',
+            shadowOpacity: theme.dark ? 0.12 : 0.25,
+          },
+        ]}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Image source={{ uri: avatar ?? '' }} style={styles.profileImage} />
+          <View style={styles.profileTextContainer}>
+            <Text
+              style={[
+                styles.profileName,
+                { color: theme.dark ? '#fff' : '#000' },
+              ]}
+            >
+              {name}
+            </Text>
+            <Text style={styles.profileTitle}>{email}</Text>
+          </View>
+        </View>
+
+        <View style={styles.statusContainer}>
+          <LinearGradient
+            end={{ x: 1, y: 0 }}
+            start={{ x: 0, y: 1 }}
+            style={styles.statusBox}
+            colors={['#01CED3', '#0185F7']}
+          >
+            <Text style={styles.statNumber}>{user?.orders?.length}</Text>
+            <Text style={styles.statLabel}>Enrolled</Text>
+          </LinearGradient>
+
+          <LinearGradient
+            end={{ x: 1, y: 0 }}
+            start={{ x: 0, y: 1 }}
+            style={styles.statusBox}
+            colors={['#BF6FF8', '#3C1BE9']}
+          >
+            <Text style={styles.statNumber}>0</Text>
+            <Text style={styles.statLabel}>Certificates</Text>
+          </LinearGradient>
+        </View>
+      </View>
+
+      <ScrollView
+        style={{ padding: scale(20) }}
+        contentContainerStyle={{ paddingBottom: verticalScale(65) }}
+        showsVerticalScrollIndicator={false}
+      >
+        <ProfileSection
+          title="Enrolled Courses"
+          subTitle="Explore your all enrolled courses"
+          icon={
+            <Feather
+              name="book-open"
+              size={scale(21)}
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="Course Leaderboard"
+          subTitle="Let's see your position in Leaderboard"
+          icon={
+            <MaterialIcons
+              size={scale(23)}
+              name="leaderboard"
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="My Tickets"
+          subTitle="Explore your all support tickets"
+          icon={
+            <MaterialCommunityIcons
+              size={scale(22)}
+              name="message-alert-outline"
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="Support Center"
+          subTitle="Explore our fastest support center"
+          icon={
+            <FontAwesome
+              name="support"
+              size={scale(22)}
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="Notifications"
+          subTitle="Explore the important notifications"
+          icon={
+            <Ionicons
+              size={scale(22)}
+              name="notifications"
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="Settings"
+          subTitle="Control the app as per your preferences"
+          icon={
+            <Ionicons
+              size={scale(23)}
+              name="settings-sharp"
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          title="Privacy & Policy"
+          subTitle="Explore our privacy and policy"
+          icon={
+            <MaterialIcons
+              name="policy"
+              size={scale(23)}
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+
+        <ProfileSection
+          onPress={logoutHandler}
+          title="Log Out"
+          subTitle="Logging out from your account"
+          icon={
+            <MaterialIcons
+              name="logout"
+              size={scale(23)}
+              color={theme.dark ? '#fff' : '#0047AB'}
+            />
+          }
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -91,7 +255,7 @@ const styles = StyleSheet.create({
     shadowColor: '#999',
     borderRadius: scale(20),
     backgroundColor: '#fff',
-    marginTop: verticalScale(-90),
+    marginTop: verticalScale(-70),
     shadowOffset: {
       width: 0,
       height: 2,
@@ -124,13 +288,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
 
-  statsContainer: {
+  statusContainer: {
     flexDirection: 'row',
     marginTop: verticalScale(10),
     justifyContent: 'space-around',
   },
 
-  statBox: {
+  statusBox: {
     color: '#fff',
     width: scale(120),
     alignItems: 'center',

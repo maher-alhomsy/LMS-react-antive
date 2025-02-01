@@ -163,6 +163,7 @@ const Page = () => {
         <ProfileSection
           title="Notifications"
           subTitle="Explore the important notifications"
+          onPress={() => router.push('/(routes)/notifications')}
           icon={
             <Ionicons
               size={scale(22)}

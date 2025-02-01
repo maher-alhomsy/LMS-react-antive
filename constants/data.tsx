@@ -139,3 +139,18 @@ export const videoLessonsData = [
       "Let's build one real-time car booking full-stack mobile app by using Expo React Native",
   },
 ];
+
+export const NotificationsData = [
+  {
+    id: '1',
+    title: 'New Answer Received',
+    message: 'You have a new answer in your question',
+    status: 'Unread',
+  },
+  {
+    id: '2',
+    title: 'New Reply Received',
+    message: 'You have a new reply in your support question',
+    status: 'Unread',
+  },
+];

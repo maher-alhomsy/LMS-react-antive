@@ -41,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name="(routes)/settings/index" />
         <Stack.Screen name="(routes)/onboarding/index" />
         <Stack.Screen name="(routes)/notifications/index" />
+        <Stack.Screen name="(routes)/support-center/index" />
       </Stack>
     </ThemeProvider>
   );

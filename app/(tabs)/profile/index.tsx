@@ -159,6 +159,7 @@ const Page = () => {
         <ProfileSection
           title="Support Center"
           subTitle="Explore our fastest support center"
+          onPress={() => router.push('/(routes)/support-center')}
           icon={
             <FontAwesome
               name="support"

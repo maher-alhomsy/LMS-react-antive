@@ -73,6 +73,7 @@ const Page = () => {
         <SupportCard
           title="FAQ's"
           icon={<IconTwo />}
+          onPress={() => router.push('(routes)/faq')}
           subTitle="Find intelligent answers instantly"
         />
 

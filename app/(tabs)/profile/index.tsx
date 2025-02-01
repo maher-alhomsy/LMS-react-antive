@@ -1,4 +1,11 @@
-import { Text, View, Image, ScrollView, StyleSheet } from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Linking,
+} from 'react-native';
 
 import {
   Feather,
@@ -7,6 +14,8 @@ import {
   MaterialIcons,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
 import * as SecureStore from 'expo-secure-store';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,7 +32,6 @@ import useUserData from '@/hooks/useUserData';
 import { useTheme } from '@/context/theme.context';
 import ThemeSwitcher from '@/components/common/ThemeSwitcher';
 import ProfileSection from '@/components/common/ProfileSection';
-import { router } from 'expo-router';
 
 const Page = () => {
   const { theme } = useTheme();
@@ -175,6 +183,7 @@ const Page = () => {
 
         <ProfileSection
           title="Settings"
+          onPress={() => router.push('/(routes)/settings')}
           subTitle="Control the app as per your preferences"
           icon={
             <Ionicons
@@ -188,6 +197,11 @@ const Page = () => {
         <ProfileSection
           title="Privacy & Policy"
           subTitle="Explore our privacy and policy"
+          onPress={async () =>
+            await WebBrowser.openBrowserAsync(
+              'https://sadiq.app/privacy-policy/'
+            )
+          }
           icon={
             <MaterialIcons
               name="policy"

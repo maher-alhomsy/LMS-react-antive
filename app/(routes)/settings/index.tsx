@@ -122,6 +122,12 @@ const Page = () => {
           onChange={() => updatePreferences('latestUpdates')}
         />
 
+        <SettingsSection
+          text="Support Ticket Response"
+          value={supportTicketResponse}
+          onChange={() => updatePreferences('supportTicketResponse')}
+        />
+
         <View style={styles.settingSection}>
           <Text
             style={[

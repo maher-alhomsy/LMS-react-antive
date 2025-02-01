@@ -147,6 +147,7 @@ const Page = () => {
         <ProfileSection
           title="My Tickets"
           subTitle="Explore your all support tickets"
+          onPress={() => router.push('(routes)/my-tickets')}
           icon={
             <MaterialCommunityIcons
               size={scale(22)}

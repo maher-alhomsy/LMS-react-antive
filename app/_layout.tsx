@@ -40,6 +40,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(routes)/faq/index" />
         <Stack.Screen name="(routes)/settings/index" />
+        <Stack.Screen name="(routes)/my-tickets/index" />
         <Stack.Screen name="(routes)/onboarding/index" />
         <Stack.Screen name="(routes)/notifications/index" />
         <Stack.Screen name="(routes)/support-center/index" />

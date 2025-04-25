@@ -19,9 +19,9 @@ import IconTwo from '@/assets/svgs/onboarding/icon-2';
 import IconThree from '@/assets/svgs/onboarding/icon-3';
 import SupportCard from '@/components/common/SupportCard';
 import TicketModal from '@/components/common/TicketModal';
-import SupportBannerOne from '@/assets/svgs/support-senter/one';
-import SupportBannerTwo from '@/assets/svgs/support-senter/two';
-import SupportBannerThree from '@/assets/svgs/support-senter/three';
+import SupportBannerOne from '@/assets/svgs/support-center/one';
+import SupportBannerTwo from '@/assets/svgs/support-center/two';
+import SupportBannerThree from '@/assets/svgs/support-center/three';
 
 const Page = () => {
   const { theme } = useTheme();
@@ -73,7 +73,7 @@ const Page = () => {
         <SupportCard
           title="FAQ's"
           icon={<IconTwo />}
-          onPress={() => router.push('(routes)/faq')}
+          onPress={() => router.push('/(routes)/faq')}
           subTitle="Find intelligent answers instantly"
         />
 

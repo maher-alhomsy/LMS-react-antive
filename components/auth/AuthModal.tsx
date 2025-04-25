@@ -150,7 +150,12 @@ const AuthModal = ({
 
     const { data } = await axios.post('login', { signedToken: token });
 
-    await SecureStore.setItemAsync('accessToken', data.accessToken);
+    Promise.all([
+      SecureStore.setItemAsync('name', name),
+      SecureStore.setItemAsync('email', email),
+      SecureStore.setItemAsync('avatar', avatar),
+      SecureStore.setItemAsync('accessToken', data.accessToken),
+    ]);
     setModalVisible(false);
     router.push('/(tabs)');
   };

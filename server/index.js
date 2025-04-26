@@ -62,6 +62,26 @@ app.get('/me', isAuthenticated, async (req, res) => {
   }
 });
 
+app.get('/get-courses', async (req, res) => {
+  try {
+    const courses = await prisma.course.findMany({
+      include: {
+        courseData: {
+          include: { links: true },
+        },
+        benefits: true,
+        prerequisites: true,
+      },
+    });
+
+    res.status(201).json({ success: true, courses });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log('Server is running on port ' + port);
 });

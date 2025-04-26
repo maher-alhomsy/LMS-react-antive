@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import { verticalScale } from 'react-native-size-matters';
+import { scale, verticalScale } from 'react-native-size-matters';
 
+import useGetCourses from '@/hooks/useGetCourses';
 import { useTheme } from '@/context/theme.context';
 import Skeleton from '@/components/common/Skeleton';
 import HomeBanner from '@/components/home/HomeBanner';
+import CourseCard from '@/components/common/CourseCard';
 import WelcomeHeader from '@/components/home/WelcomeHeader';
 import GradientText from '@/components/common/GradientText';
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
 
 const Home = () => {
   const { theme } = useTheme();
-  const [loading, setLoading] = useState(true);
+  const { courses, error, loading } = useGetCourses();
 
   return (
     <>
@@ -60,21 +61,12 @@ const Home = () => {
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View
-                style={{
-                  borderRadius: 100,
-                  width: windowWidth(15),
-                  height: windowWidth(15),
-                  backgroundColor: '#12BB70',
-                }}
-              />
+              <View style={styles.gradientText} />
               <Text
-                style={{
-                  fontSize: fontSizes.FONT18,
-                  paddingLeft: windowWidth(5),
-                  fontFamily: 'Poppins_400Regular',
-                  color: theme.dark ? '#fff' : '#000',
-                }}
+                style={[
+                  styles.innerText,
+                  { color: theme.dark ? '#fff' : '#000' },
+                ]}
               >
                 our comprehensive project based courses
               </Text>
@@ -87,7 +79,14 @@ const Home = () => {
               <Skeleton />
             </>
           ) : (
-            <View></View>
+            <View style={styles.listContainer}>
+              <FlatList
+                data={courses}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <CourseCard item={item} />}
+                ListEmptyComponent={<Text>No Courses Available yet!</Text>}
+              />
+            </View>
           )}
         </ScrollView>
       </LinearGradient>
@@ -96,3 +95,23 @@ const Home = () => {
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  gradientText: {
+    borderRadius: 100,
+    width: windowWidth(15),
+    height: windowWidth(15),
+    backgroundColor: '#12BB70',
+  },
+
+  innerText: {
+    fontSize: fontSizes.FONT18,
+    paddingLeft: windowWidth(5),
+    fontFamily: 'Poppins_400Regular',
+  },
+
+  listContainer: {
+    paddingHorizontal: scale(8),
+    paddingBottom: windowHeight(18),
+  },
+});

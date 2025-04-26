@@ -47,3 +47,87 @@ type Order = {
   createdAt: any;
   updatedAt: any;
 };
+
+type Benefits = {
+  id: string;
+  title: string;
+  courseId: string;
+  createdAt: any;
+  updatedAt: any;
+};
+
+type Reviews = {
+  id: string;
+  user: User;
+  userId: string;
+  courseId: string;
+  rating: number;
+  replies: any[];
+  comment: string;
+  createdAt: any;
+  updatedAt: any;
+};
+
+type Answer = {
+  id: string;
+  userId: string;
+  questionId: string;
+  answer: string;
+  user: User;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type Question = {
+  id: string;
+  userId: string;
+  user: User;
+  contentId: string;
+  question: string;
+  image?: string;
+  answers: Answer[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type CourseData = {
+  id: string;
+  title: string;
+  videoUrl: string;
+  conversationId?: string;
+  videoSection: string;
+  questions: Question[];
+  description: string;
+  videoLength: string;
+  links: any;
+  videoPlayer: string | null;
+  courseId: string;
+};
+
+export type CourseType = {
+  id: string;
+  name: string;
+  description: string;
+  categories: string | null;
+  price: number;
+  estimatedPrice: number | null;
+  thumbnail: string;
+  tags: string;
+  level: string;
+  demoUrl: string;
+  slug: string;
+  lessons: number;
+  payment_id: string | null;
+  ratings: number;
+  purchased: number;
+  iosProductId?: string;
+  androidProductId?: string;
+  benefits: Benefits[];
+  prerequisites: Benefits[];
+  courseData: CourseData[];
+  reviews: Reviews[];
+  orders: Order[];
+  createdAt: any;
+  updatedAt: any;
+};

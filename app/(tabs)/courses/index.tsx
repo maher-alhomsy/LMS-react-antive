@@ -1,69 +1,42 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
-import { verticalScale } from 'react-native-size-matters';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { scale, verticalScale } from 'react-native-size-matters';
 
+import useGetCourses from '@/hooks/useGetCourses';
 import { useTheme } from '@/context/theme.context';
 import Skeleton from '@/components/common/Skeleton';
+import CourseCard from '@/components/common/CourseCard';
 import GradientText from '@/components/common/GradientText';
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
 
 const Page = () => {
   const { theme } = useTheme();
-  const [loading, setLoading] = useState(true);
-
-  const bottomTabBarHeight = useBottomTabBarHeight();
+  const { courses, loading } = useGetCourses();
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.dark ? '#131313' : '#fff' }}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ marginTop: verticalScale(-28) }}
-        contentContainerStyle={{ paddingBottom: verticalScale(50) }}
-      >
-        <View style={{ marginHorizontal: windowWidth(20) }}>
-          <View style={{ flexDirection: 'row', marginTop: windowHeight(8) }}>
-            <Text
-              style={{
-                fontSize: fontSizes.FONT35,
-                fontFamily: 'Poppins_500Medium',
-                color: theme.dark ? '#fff' : '#000',
-              }}
-            >
-              Popular
-            </Text>
-
-            <GradientText
-              text=" Courses"
-              styles={{
-                fontSize: fontSizes.FONT35,
-                fontFamily: 'Poppins_500Medium',
-              }}
-            />
-          </View>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={styles.dot} />
-            <Text style={[styles.txt, { color: theme.dark ? '#fff' : '#000' }]}>
-              our comprehensive project based courses
-            </Text>
-          </View>
-        </View>
-
+      <View style={{ marginTop: verticalScale(-28) }}>
         {loading ? (
           <>
             <Skeleton />
             <Skeleton />
           </>
         ) : (
-          <View></View>
+          <View style={styles.listContainer}>
+            <FlatList
+              data={courses}
+              ListHeaderComponent={ListHeader}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <CourseCard item={item} />}
+              ListEmptyComponent={<Text>No Courses Available yet!</Text>}
+            />
+          </View>
         )}
-      </ScrollView>
+      </View>
 
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
     </SafeAreaView>
@@ -71,6 +44,41 @@ const Page = () => {
 };
 
 export default Page;
+
+const ListHeader = () => {
+  const { theme } = useTheme();
+
+  return (
+    <View style={{ marginHorizontal: windowWidth(20) }}>
+      <View style={{ flexDirection: 'row', marginTop: windowHeight(8) }}>
+        <Text
+          style={{
+            fontSize: fontSizes.FONT35,
+            fontFamily: 'Poppins_500Medium',
+            color: theme.dark ? '#fff' : '#000',
+          }}
+        >
+          Popular
+        </Text>
+
+        <GradientText
+          text=" Courses"
+          styles={{
+            fontSize: fontSizes.FONT35,
+            fontFamily: 'Poppins_500Medium',
+          }}
+        />
+      </View>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.dot} />
+        <Text style={[styles.txt, { color: theme.dark ? '#fff' : '#000' }]}>
+          our comprehensive project based courses
+        </Text>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   dot: {
@@ -86,5 +94,10 @@ const styles = StyleSheet.create({
     paddingLeft: windowWidth(5),
     paddingBottom: windowHeight(20),
     fontFamily: 'Poppins_400Regular',
+  },
+
+  listContainer: {
+    paddingHorizontal: scale(8),
+    paddingBottom: windowHeight(18),
   },
 });

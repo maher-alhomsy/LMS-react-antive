@@ -33,46 +33,6 @@ const Home = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: windowHeight(50) }}
         >
-          <HomeBanner />
-          <View
-            style={{
-              marginTop: verticalScale(-25),
-              marginHorizontal: windowWidth(20),
-            }}
-          >
-            <View style={{ flexDirection: 'row', marginTop: windowHeight(5) }}>
-              <Text
-                style={{
-                  fontSize: fontSizes.FONT35,
-                  fontFamily: 'Poppins_500Medium',
-                  color: theme.dark ? '#fff' : '#000',
-                }}
-              >
-                Popular
-              </Text>
-
-              <GradientText
-                text=" Courses"
-                styles={{
-                  fontSize: fontSizes.FONT35,
-                  fontFamily: 'Poppins_500Medium',
-                }}
-              />
-            </View>
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={styles.gradientText} />
-              <Text
-                style={[
-                  styles.innerText,
-                  { color: theme.dark ? '#fff' : '#000' },
-                ]}
-              >
-                our comprehensive project based courses
-              </Text>
-            </View>
-          </View>
-
           {loading ? (
             <>
               <Skeleton />
@@ -82,6 +42,7 @@ const Home = () => {
             <View style={styles.listContainer}>
               <FlatList
                 data={courses}
+                ListHeaderComponent={ListHeader}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <CourseCard item={item} />}
                 ListEmptyComponent={<Text>No Courses Available yet!</Text>}
@@ -95,6 +56,51 @@ const Home = () => {
 };
 
 export default Home;
+
+const ListHeader = () => {
+  const { theme } = useTheme();
+
+  return (
+    <>
+      <HomeBanner />
+      <View
+        style={{
+          marginTop: verticalScale(-25),
+          marginHorizontal: windowWidth(20),
+        }}
+      >
+        <View style={{ flexDirection: 'row', marginTop: windowHeight(5) }}>
+          <Text
+            style={{
+              fontSize: fontSizes.FONT35,
+              fontFamily: 'Poppins_500Medium',
+              color: theme.dark ? '#fff' : '#000',
+            }}
+          >
+            Popular
+          </Text>
+
+          <GradientText
+            text=" Courses"
+            styles={{
+              fontSize: fontSizes.FONT35,
+              fontFamily: 'Poppins_500Medium',
+            }}
+          />
+        </View>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.gradientText} />
+          <Text
+            style={[styles.innerText, { color: theme.dark ? '#fff' : '#000' }]}
+          >
+            our comprehensive project based courses
+          </Text>
+        </View>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   gradientText: {

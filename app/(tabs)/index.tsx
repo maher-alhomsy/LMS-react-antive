@@ -7,7 +7,7 @@ import useGetCourses from '@/hooks/useGetCourses';
 import { useTheme } from '@/context/theme.context';
 import Skeleton from '@/components/common/Skeleton';
 import HomeBanner from '@/components/home/HomeBanner';
-import CourseCard from '@/components/common/CourseCard';
+import CourseCard from '@/components/cards/CourseCard';
 import WelcomeHeader from '@/components/home/WelcomeHeader';
 import GradientText from '@/components/common/GradientText';
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';

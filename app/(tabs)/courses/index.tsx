@@ -7,7 +7,7 @@ import { scale, verticalScale } from 'react-native-size-matters';
 import useGetCourses from '@/hooks/useGetCourses';
 import { useTheme } from '@/context/theme.context';
 import Skeleton from '@/components/common/Skeleton';
-import CourseCard from '@/components/common/CourseCard';
+import CourseCard from '@/components/cards/CourseCard';
 import GradientText from '@/components/common/GradientText';
 import { fontSizes, windowHeight, windowWidth } from '@/themes/app.constant';
 

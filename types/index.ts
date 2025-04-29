@@ -48,7 +48,7 @@ type Order = {
   updatedAt: any;
 };
 
-type Benefits = {
+export type Benefits = {
   id: string;
   title: string;
   courseId: string;
@@ -56,7 +56,7 @@ type Benefits = {
   updatedAt: any;
 };
 
-type Reviews = {
+export type Reviews = {
   id: string;
   user: User;
   userId: string;
@@ -91,7 +91,7 @@ type Question = {
   updatedAt: Date;
 };
 
-type CourseData = {
+export type CourseData = {
   id: string;
   title: string;
   videoUrl: string;

@@ -39,7 +39,7 @@ type Review = {
   updatedAt: any;
 };
 
-type Order = {
+export type Order = {
   id: string;
   userId: string;
   payment_info: string | null;

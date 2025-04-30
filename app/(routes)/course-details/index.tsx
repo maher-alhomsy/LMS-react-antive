@@ -10,8 +10,9 @@ import {
 
 import axios from 'axios';
 import { MotiView } from 'moti';
+import { BlurView } from 'expo-blur';
 import { Skeleton } from 'moti/skeleton';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { scale, verticalScale } from 'react-native-size-matters';
 
@@ -24,14 +25,13 @@ import {
   windowHeight,
 } from '@/themes/app.constant';
 import { useUser } from '@/hooks/useUser';
-import { CourseType, Reviews } from '@/types';
 import { useTheme } from '@/context/theme.context';
+import { CourseType, Order, Reviews } from '@/types';
 import { Spacer } from '@/components/common/Skeleton';
 import ReviewCard from '@/components/cards/ReviewCard';
 import CourseInfo from '@/components/course/CourseInfo';
 import CourseLesson from '@/components/course/CourseLesson';
 import CourseDetailsTabs from '@/components/course/CourseDetailsTabs';
-import { BlurView } from 'expo-blur';
 
 const CourseDetailsPage = () => {
   const { theme } = useTheme();
@@ -41,6 +41,7 @@ const CourseDetailsPage = () => {
   const { user, loader: userLoader } = useUser();
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeButton, setActiveButton] = useState('About');
+  const [purchaseLoader, setPurchaseLoader] = useState(false);
 
   const courseData: CourseType = JSON.parse(item as string);
 
@@ -51,6 +52,18 @@ const CourseDetailsPage = () => {
 
     setLoader(false);
     setReviews(data.reviewsData);
+  };
+
+  const userOrders = user?.orders;
+  const isPurchased = userOrders?.find(
+    (i: Order) => i.courseId === courseData.id
+  );
+
+  const handleCourseAccess = () => {
+    router.push({
+      pathname: '/(routes)/course-access',
+      params: { item: JSON.stringify(courseData) },
+    });
   };
 
   return (
@@ -250,25 +263,23 @@ const CourseDetailsPage = () => {
           paddingBottom: IsAndroid ? verticalScale(5) : windowHeight(20),
         }}
       >
-        <TouchableOpacity
-          style={{
-            backgroundColor: '#2467EC',
-            borderRadius: windowWidth(8),
-            paddingVertical: windowHeight(10),
-          }}
-        >
-          <Text
-            style={{
-              textAlign: 'center',
-              color: '#FFFF',
-              fontSize: fontSizes.FONT24,
-              fontFamily: 'Poppins_600SemiBold',
-            }}
+        {isPurchased ? (
+          <TouchableOpacity
+            onPress={handleCourseAccess}
+            style={styles.enterCourseButton}
           >
-            Buy now{' '}
-            {courseData?.price === 0 ? '(free)' : `$${courseData?.price}`}
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.enterCourseText}>Enter to course</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={[styles.buyButton, { opacity: purchaseLoader ? 0.6 : 1 }]}
+          >
+            <Text style={styles.buyText}>
+              Buy now{' '}
+              {courseData?.price === 0 ? '(free)' : `$${courseData?.price}`}
+            </Text>
+          </TouchableOpacity>
+        )}
       </BlurView>
     </SafeAreaView>
   );
@@ -326,5 +337,31 @@ const styles = StyleSheet.create({
     height: verticalScale(35),
     marginHorizontal: scale(8),
     marginTop: verticalScale(15),
+  },
+
+  enterCourseButton: {
+    backgroundColor: '#2467EC',
+    borderRadius: windowWidth(8),
+    paddingVertical: windowHeight(10),
+  },
+
+  enterCourseText: {
+    color: '#FFFF',
+    textAlign: 'center',
+    fontSize: fontSizes.FONT24,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+
+  buyButton: {
+    backgroundColor: '#2467EC',
+    borderRadius: windowWidth(8),
+    paddingVertical: windowHeight(10),
+  },
+
+  buyText: {
+    textAlign: 'center',
+    color: '#FFFF',
+    fontSize: fontSizes.FONT24,
+    fontFamily: 'Poppins_600SemiBold',
   },
 });

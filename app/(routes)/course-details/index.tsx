@@ -31,6 +31,7 @@ import ReviewCard from '@/components/cards/ReviewCard';
 import CourseInfo from '@/components/course/CourseInfo';
 import CourseLesson from '@/components/course/CourseLesson';
 import CourseDetailsTabs from '@/components/course/CourseDetailsTabs';
+import { BlurView } from 'expo-blur';
 
 const CourseDetailsPage = () => {
   const { theme } = useTheme();
@@ -239,6 +240,36 @@ const CourseDetailsPage = () => {
           )}
         </View>
       </ScrollView>
+
+      <BlurView
+        intensity={theme.dark ? 30 : 2}
+        style={{
+          backgroundColor: !theme.dark ? '#eaf3fb85' : '#000',
+          paddingHorizontal: windowWidth(12),
+          paddingVertical: windowHeight(8),
+          paddingBottom: IsAndroid ? verticalScale(5) : windowHeight(20),
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#2467EC',
+            borderRadius: windowWidth(8),
+            paddingVertical: windowHeight(10),
+          }}
+        >
+          <Text
+            style={{
+              textAlign: 'center',
+              color: '#FFFF',
+              fontSize: fontSizes.FONT24,
+              fontFamily: 'Poppins_600SemiBold',
+            }}
+          >
+            Buy now{' '}
+            {courseData?.price === 0 ? '(free)' : `$${courseData?.price}`}
+          </Text>
+        </TouchableOpacity>
+      </BlurView>
     </SafeAreaView>
   );
 };
